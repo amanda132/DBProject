@@ -70,7 +70,7 @@ def index():
 # posts = Event.query.order_by(Event.begin_time.desc()).all()
     #posts = db.session.query(Event, Researcher, Hold, Organization, Participate).join(Hold, Hold.eid == Event.eid).join(Organization, Organization.oid == Hold.oid).join(Participate, Participate.hid == Hold.hid).join(Researcher, Researcher.rid == Participate.rid).all()
     #posts = db.session.query(Event, Hold, Organization, Participate, Researcher).join(Hold, Hold.eid == Event.eid).join(Organization, Organization.oid == Hold.oid).join(Participate, Participate.hid == Hold.hid).join(Researcher, Researcher.rid == Participate.rid).all()
-    posts = db.session.query(Event.eid, Event.location, Event.food_info, Event.title, Event.abstract, Event.begin_time, Event.end_time, Organization.title, Researcher.rname).outerjoin(Hold, Hold.eid == Event.eid).outerjoin(Organization, Organization.oid == Hold.oid).outerjoin(Participate, Participate.hid == Hold.hid).outerjoin(Researcher, Researcher.rid == Participate.rid).order_by(Event.begin_time.desc()).all()
+    posts = db.session.query(Event.location, Event.food_info, Event.title, Event.abstract, Event.begin_time, Event.end_time, Organization.title, Researcher.rname).outerjoin(Hold, Hold.eid == Event.eid).outerjoin(Organization, Organization.oid == Hold.oid).outerjoin(Participate, Participate.hid == Hold.hid).outerjoin(Researcher, Researcher.rid == Participate.rid).all()
     return render_template('index.html', posts=posts)
 
 
@@ -80,7 +80,7 @@ def about():
 
 @app.route('/post/<int:post_eid>')
 def post(post_eid):
-    post = db.session.query(Event.eid, Event.location, Event.food_info, Event.title, Event.abstract, Event.begin_time, Event.end_time, Organization.title, Researcher.rname).outerjoin(Hold, Hold.eid == Event.eid).outerjoin(Organization, Organization.oid == Hold.oid).outerjoin(Participate, Participate.hid == Hold.hid).outerjoin(Researcher, Researcher.rid == Participate.rid).filter(Event.eid == post_eid).one()
+    post = db.session.query(Event.eid, Event.location, Event.food_info, Event.title, Event.abstract, Event.begin_time, Event.end_time, Organization.title, Researcher.rname).outerjoin(Hold, Hold.eid == Event.eid).outerjoin(Organization, Organization.oid == Hold.oid).outerjoin(Participate, Participate.hid == Hold.hid).outerjoin(Researcher, Researcher.rid == Participate.rid).filter_by(eid == post_eid).one()
     return render_template('post.html', post = post)
 
 @app.route('/contact')

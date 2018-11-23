@@ -69,7 +69,7 @@
         <div class="col-lg-8 col-md-10 mx-auto">
         {% for post in posts %}
           <div class="post-preview">
-            <a href="{{ url_for('post', post_id=post.id) }}">
+            <a href="{{ url_for('post', post_eid=post.eid) }}">
               <h2 class="post-title">
                 {{ post.title }}
               </h2>
@@ -77,7 +77,7 @@
                 {{ post.subtitle }}
               </h3>
             </a>
-	    <p class="post-meta"> By {{ post.author }} at {{ post.begin_time.strftime('%X, %B %d, %Y') }} in {{post.location}}</p>
+	    <p class="post-meta"> By {{ post.rname }} at {{ post.begin_time.strftime('%X, %B %d, %Y') }} in {{post.location}}</p>
           </div>
           {% endfor %}
           <hr>

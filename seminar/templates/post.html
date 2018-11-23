@@ -58,8 +58,8 @@
               <h1>{{ post.title }}</h1>
               <h2 class="subheading">{{ post.subtitle }}</h2>
               <span class="meta">Posted by
-                {{ post.author }}
-                on {{ post.date_posted.strftime('%B %d, %Y') }}</span>
+                {{ post.rname }}
+                on {{ post.begin_time.strftime('%X, %B %d, %Y') }}</span>
             </div>
           </div>
         </div>
@@ -71,7 +71,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            {{ post.content|safe }}
+            {{ post.abstract|safe }}
           </div>
         </div>
       </div>
