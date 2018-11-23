@@ -21,7 +21,7 @@ class Event(db.Model):
     abstract = db.Column(db.Text)
     begin_time = db.Column(db.Time)
     end_time = db.Column(db.Time)
-    organizations = db.relationship("Hold", back_populates = "event")
+    event_hold = db.relationship("Hold", back_populates = "hold_event")
 
 class Areas(db.Model):
     aid = db.Column(db.Integer, primary_key = True)
@@ -33,39 +33,41 @@ class Researcher(db.Model):
     gender = db.Column(db.String(50))
     citations = db.Column(db.String(50))
     publications = db.Column(db.String(50))
-    researchers = db.relationship("Participate", back_populates = "holds")
-
-class Organization(db.Model):
-    oid = db.Column(db.Integer, primary_key = True)
-    titel = db.Column(db.String(50), nullable = False)
-    iid = db.Column(db.Integer, nullable = False)
-    events = db.relationship("Hold", back_populates = "organization")
-    institutions = db.relationship("Institution", back_populates = "organizations")
+    researcher_participate = db.relationship("Participate", back_populates = "participate_researcher")
 
 class Institution(db.Model):
     iid = db.Column(db.Integer, primary_key = True)
     iname = db.Column(db.String(50), nullable = False)
+    organizations = db.relationship('Organization', backref = 'institution', lazy = True)
 
+class Organization(db.Model):
+    oid = db.Column(db.Integer, primary_key = True)
+    title = db.Column(db.String(50), nullable = False)
+    iid = db.Column(db.Integer, db.ForeignKey(Institution.iid), nullable = False)
+    organization_hold = db.relationship("Hold", back_populates = "hold_organization")
 
 class Hold(db.Model):
     hid = db.Column(db.Integer, primary_key = True)
-    oid = db.Column(db.Integer, db.ForeignKey(organization.oid), nullable = False)
-    eid = db.Column(db.Integer, db.ForeignKey(event.eid), nullable = False)
-    organization = db.relationship("Event", back_populates = "organizations")
-    holds = db.relationship("Organization", back_populates = "events")
-    researchers = db.relationship("Participate", back_populates = "hold")
+    oid = db.Column(db.Integer, db.ForeignKey(Organization.oid), nullable = False)
+    eid = db.Column(db.Integer, db.ForeignKey(Event.eid), nullable = False)
+    hold_event = db.relationship("Event", back_populates = "event_hold")
+    hold_organization = db.relationship("Organization", back_populates = "organization_hold")
+    hold_participate = db.relationship("Participate", back_populates = "participate_hold")
 
 class Participate(db.Model):
-    hid = db.Column(db.Integer, db.ForeignKey(hold.hid), primary_key = True)
-    rid = db.Column(db.Integer, db.ForeignKey(researcher.rid), primary_key = True)
-    ptype = db.Column(db.String(50), db.CheckConstraint('ptype in ('audience', 'host', 'speaker')')
-    researcher  = db.relationship("Researcher", back_populates = "holds")
-    hold = db.relationship("Hold", back_populates = "researchers")
+    hid = db.Column(db.Integer, db.ForeignKey(Hold.hid), primary_key = True)
+    rid = db.Column(db.Integer, db.ForeignKey(Researcher.rid), primary_key = True)
+    ptype = db.Column(db.String(50), db.CheckConstraint('ptype in ("audience", "host", "speaker")'))
+    participate_researcher  = db.relationship("Researcher", back_populates = "researcher_participate")
+    participate_hold = db.relationship("Hold", back_populates = "hold_participate")
     
 
 @app.route('/')
 def index():
-    posts = event.query.order_by(event.begin_time.desc()).all()
+    db.create_all()
+    #posts = db.session.query(Event, Researcher, Hold, Organization, Participate).join(Hold).join(Organization).join(Researcher).join(Participate)
+    posts = db.session.query(Event, Researcher, Hold, Organization, Participate).filter(Hold.eid == Event.eid).filter(Participate.rid == Researcher.rid).filter(Participate.hid == Hold.hid).filter(Hold.oid == Organization.oid).all()
+# posts = Event.query.order_by(Event.begin_time.desc()).all()
     return render_template('index.html', posts=posts)
 
 
