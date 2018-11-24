@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Clean Blog - Start Bootstrap Theme</title>
+    <title>Events for you</title>
 
     <!-- Bootstrap core CSS -->
     <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
@@ -39,7 +39,7 @@
               <a class="nav-link" href="{{ url_for('index') }}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('about') }}">About</a>
+              <a class="nav-link" href="{{ url_for('about') }}">Search</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('add') }}">Add</a>
@@ -50,17 +50,21 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('{{ url_for('static', filename='post-bg.jpg') }}')">
+    <header class="masthead" style="background-image: url('{{ url_for('static', filename='columbia_blue.png') }}')">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="post-heading">
+	    <div class="post-heading">
               <h1>{{ post.title }}</h1>
-              <h2 class="subheading">{{ post.subtitle }}</h2>
-              <span class="meta">Posted by
-                {{ post.rname }}
-                on {{ post.begin_time.strftime('%X, %B %d, %Y') }}</span>
-            </div>
+              <h2 class="subheading", style="padding-bottom:2px">{{ post.subtitle }}</h2>
+              <span class="meta", style = "padding-bottom:2px">Speaker:
+		      {{ post.rname }}
+		</span>
+	      <span class = "meta", style = "padding-bottom:2px"> Time: {{ post.begin_time.strftime('%X, %B %d, %Y') }}</span>
+              <span class = "meta", style = "padding-bottom:2px"> Location: {{ post.location }}</span>
+              <span class = "meta", style = "padding-bottom:2px"> Organizer: {{ post.otitle }}</span>
+	      <span class = "meta", style = "padding-bottom:2px"> Food Information: {{ post.food_info }}</span>
+	    </div>
           </div>
         </div>
       </div>
@@ -84,7 +88,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <p class="copyright text-muted">Copyright &copy; Your Website 2017</p>
+            <p class="copyright text-muted">Copyright &copy; Yiguang Zhang and Yiru Liu, 2018</p>
           </div>
         </div>
       </div>

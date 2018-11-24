@@ -23,7 +23,7 @@ class Event(db.Model):
     end_time = db.Column(db.Time)
     event_hold = db.relationship("Hold", back_populates = "hold_event")
 
-class Areas(db.Model):
+class Area(db.Model):
     aid = db.Column(db.Integer, primary_key = True)
     aname = db.Column(db.String(50))
 
@@ -42,7 +42,7 @@ class Institution(db.Model):
 
 class Organization(db.Model):
     oid = db.Column(db.Integer, primary_key = True)
-    title = db.Column(db.String(50), nullable = False)
+    otitle = db.Column(db.String(50), nullable = False)
     iid = db.Column(db.Integer, db.ForeignKey(Institution.iid), nullable = False)
     organization_hold = db.relationship("Hold", back_populates = "hold_organization")
 
@@ -60,17 +60,36 @@ class Participate(db.Model):
     ptype = db.Column(db.String(50), db.CheckConstraint('ptype in ("audience", "host", "speaker")'))
     participate_researcher  = db.relationship("Researcher", back_populates = "researcher_participate")
     participate_hold = db.relationship("Hold", back_populates = "hold_participate")
-    
+
+class Department(db.Model):
+    did = db.Column(db.Integer, primary_key = True)
+    dname = db.Column(db.String(50), nullable = False)
+    iid = db.Column(db.Integer, db.ForeignKey(Institution.iid), nullable = False)
+
+class Focus(db.Model):
+    aid = db.Column(db.Integer, db.ForeignKey(Area.aid), primary_key = True)
+    rid = db.Column(db.Integer, db.ForeignKey(Researcher.rid), primary_key = True)
+
+class Relates_to(db.Model):
+    aid = db.Column(db.Integer, db.ForeignKey(Area.aid), primary_key = True)
+    did = db.Column(db.Integer, db.ForeignKey(Department.did), primary_key = True)
+
+class Affiliate_with_organization(db.Model):
+    oid = db.Column(db.Integer, db.ForeignKey(Organization.oid), primary_key = True)
+    rid = db.Column(db.Integer, db.ForeignKey(Researcher.rid), primary_key = True)
+
+class Affiliate_with_department(db.Model):
+    did = db.Column(db.Integer, db.ForeignKey(Department.did), primary_key = True)
+    rid = db.Column(db.Integer, db.ForeignKey(Researcher.rid), primary_key = True) 
+
+class Label(db.Model):
+    eid = db.Column(db.Integer, db.ForeignKey(Event.eid), primary_key = True)
+    aid = db.Column(db.Integer, db.ForeignKey(Area.aid), primary_key = True)
 
 @app.route('/')
 def index():
     db.create_all()
-    #posts = db.session.query(Event, Researcher, Hold, Organization, Participate).join(Hold).join(Organization).join(Researcher).join(Participate)
-    #posts = db.session.query(Event, Researcher, Hold, Organization, Participate).filter(Hold.eid == Event.eid).filter(Participate.rid == Researcher.rid).filter(Participate.hid == Hold.hid).filter(Hold.oid == Organization.oid).all()
-# posts = Event.query.order_by(Event.begin_time.desc()).all()
-    #posts = db.session.query(Event, Researcher, Hold, Organization, Participate).join(Hold, Hold.eid == Event.eid).join(Organization, Organization.oid == Hold.oid).join(Participate, Participate.hid == Hold.hid).join(Researcher, Researcher.rid == Participate.rid).all()
-    #posts = db.session.query(Event, Hold, Organization, Participate, Researcher).join(Hold, Hold.eid == Event.eid).join(Organization, Organization.oid == Hold.oid).join(Participate, Participate.hid == Hold.hid).join(Researcher, Researcher.rid == Participate.rid).all()
-    posts = db.session.query(Event.eid, Event.location, Event.food_info, Event.title, Event.abstract, Event.begin_time, Event.end_time, Organization.title, Researcher.rname).outerjoin(Hold, Hold.eid == Event.eid).outerjoin(Organization, Organization.oid == Hold.oid).outerjoin(Participate, Participate.hid == Hold.hid).outerjoin(Researcher, Researcher.rid == Participate.rid).order_by(Event.begin_time.desc()).all()
+    posts = db.session.query(Event.eid, Event.location, Event.food_info, Event.title, Event.abstract, Event.begin_time, Event.end_time, Organization.otitle, Researcher.rname, Department.dname, Department.iid).outerjoin(Hold, Hold.eid == Event.eid).outerjoin(Organization, Organization.oid == Hold.oid).outerjoin(Participate, Participate.hid == Hold.hid).outerjoin(Researcher, Researcher.rid == Participate.rid).outerjoin(Affiliate_with_department, Affiliate_with_department.rid == Researcher.rid).outerjoin(Department, Department.did == Affiliate_with_department.did).order_by(Event.begin_time.desc()).all()
     return render_template('index.html', posts=posts)
 
 
@@ -80,7 +99,7 @@ def about():
 
 @app.route('/post/<int:post_eid>')
 def post(post_eid):
-    post = db.session.query(Event.eid, Event.location, Event.food_info, Event.title, Event.abstract, Event.begin_time, Event.end_time, Organization.title, Researcher.rname).outerjoin(Hold, Hold.eid == Event.eid).outerjoin(Organization, Organization.oid == Hold.oid).outerjoin(Participate, Participate.hid == Hold.hid).outerjoin(Researcher, Researcher.rid == Participate.rid).filter(Event.eid == post_eid).one()
+    post = db.session.query(Event.eid, Event.location, Event.food_info, Event.title, Event.abstract, Event.begin_time, Event.end_time, Organization.otitle, Researcher.rname, Department.dname, Department.iid).outerjoin(Hold, Hold.eid == Event.eid).outerjoin(Organization, Organization.oid == Hold.oid).outerjoin(Participate, Participate.hid == Hold.hid).outerjoin(Researcher, Researcher.rid == Participate.rid).outerjoin(Affiliate_with_department, Affiliate_with_department.rid == Researcher.rid).outerjoin(Department, Department.did == Affiliate_with_department.did).filter(Event.eid == post_eid).one()
     return render_template('post.html', post = post)
 
 @app.route('/contact')
@@ -91,6 +110,21 @@ def contact():
 def add():
     return render_template('add.html')
 
+@app.route('/addpost', methods=['POST'])
+def addpost():
+    location = request.form['location']
+    food_info = request.form['food_info']
+    title = request.form['title']
+    abstract = request.form['abstract']
+    begin_time = request.form['begin_time']
+    end_time = request.form['end_time']
+
+    post = Event(location = location, food_info = food_info, title = title, abstract = abstarct, begin_time = begin_time, end_time = end_time)
+
+    db.session.add(post)
+    db.session.commit()
+
+    return redirect(url_for('index'))
 if __name__ == '__main__':
     db.create_all()
     app.run(debug=True)
