@@ -119,7 +119,7 @@ def addpost():
     begin_time = request.form['begin_time']
     end_time = request.form['end_time']
 
-    post = Event(location = location, food_info = food_info, title = title, abstract = abstarct, begin_time = begin_time, end_time = end_time)
+    post = Event(location = location, food_info = food_info, title = title, abstract = abstract, begin_time = begin_time, end_time = end_time)
 
     db.session.add(post)
     db.session.commit()
