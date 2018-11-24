@@ -64,34 +64,31 @@
     </header>
 
     <!-- Main Content -->
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <form name="addForm" id="addForm" method="POST" action="{{ url_for('addpost') }}" novalidate>
-            <div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>location</label>
-                <input type="text" class="form-control" placeholder="Location" name="location" id="location" required data-validation-required-message="Please enter a location.">
-                <p class="help-block text-danger"></p>
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="form-group floating-label-form-group controls">
-                <label>food_info</label>
-                <input type="text" class="form-control" placeholder="food information" name="food_info" id="food_info" required data-validation-required-message="Please enter your email address.">
-                <p class="help-block text-danger"></p>
-              </div>
-            </div>
-            <div class="control-group">
-              <div class="form-group col-xs-12 floating-label-form-group controls">
-                <label>Event Title</label>
+    <form class="container" novalidate="" action="/echo" method="POST" id="myForm">
+    <div class="form-group">
+        <label class="form-control-label" for="inputSuccess1">Enter some input</label>
+        <input type="text" class="form-control" name="i1" id="inputSuccess1" required>
+        <div class="valid-feedback">Success! You've done it.</div>
+        <div class="invalid-feedback">No, you missed this one.</div>
+    </div>
+    <div class="form-group">
+        <label class="form-control-label" for="inputSuccess2">Enter some input</label>
+        <input type="text" class="form-control" name="i2" required id="inputSuccess2">
+        <div class="valid-feedback">Nice! You got this one!</div>
+        <div class="invalid-feedback">Sorry, you missed this one.</div>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-secondary" id="btnSubmit">Try It!</button>
+    </div>
+</form>
+<hr>
+<form class="container">
+    <div class="form-group">
+        <label class="form-control-label" for="inputSuccess3">Input with <code>is-valid</code></label>
                 <input type="text" class="form-control" placeholder="Title" name="title" id="title" required data-validation-required-message="Please enter your phone number.">
-                <div class="valid-feedback">
-                  Looks good!
-                </div>
-		<p class="help-block text-danger"></p>
+                <p class="help-block text-danger"></p>
               </div>
-            </div>
+            </div>	      
             <div class="control-group">
               <div class="form-group floating-label-form-group controls">
                 <label>Abstract</label>
@@ -199,10 +196,36 @@
     <!-- Bootstrap core JavaScript -->
     <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='popper.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+
     <!-- Contact Form JavaScript -->
-    <script src="js/jqBootstrapValidation.js"></script>
-    <script src="js/contact_me.js"></script>
+    <script src= "{{ url_for('static', filename='validator.min.js') }}></script>
+
+
+    <!-- Custom scripts for this template -->
+    <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
+
+  </body>
+
+</html>
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Clean Blog - Start Bootstrap Theme</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <script src= "{{ url_for('static', filename='validator.min.js') }}></script>
+
 
     <!-- Custom scripts for this template -->
     <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
