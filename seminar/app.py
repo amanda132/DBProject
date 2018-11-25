@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy 
 from datetime import datetime
 
@@ -106,6 +106,10 @@ def post(post_eid):
 def contact():
     return render_template('contact.html')
 
+@app.route('/search')
+def search():
+    return render_template('search.html')
+
 @app.route('/add')
 def add():
     return render_template('add.html')
@@ -119,12 +123,35 @@ def addpost():
     begin_time = request.form['begin_time']
     end_time = request.form['end_time']
 
-    post = Event(location = location, food_info = food_info, title = title, abstract = abstract, begin_time = begin_time, end_time = end_time)
+    aname = request.form['aname']
 
-    db.session.add(post)
+    rname = request.form['rname']
+    gender = request.form['gender']
+    publications = request.form['publications']
+
+    iname = request.form['iname']
+
+    otitle = request.form['otitle']
+    iid = request.form['iid']
+
+    new_event = Event(location = location, food_info = food_info, title = title, abstract = abstract, begin_time = begin_time, end_time = end_time)
+    new_area = Area(aname = aname)
+    new_researcher = Researcher(rname = rname, gender = gender, publications = publications)
+    new_institution = Institution(iid = iid, iname = iname)
+    new_organization = Organization(otitle = otitle, iid = iid)
+
+    db.session.add(new_event)
+    # db.session.commit()
+    db.session.add(new_area)
+    # db.session.commit()
+    db.session.add(new_researcher)
+    # db.session.commit()
+    db.session.add(new_institution)
+    # db.session.commmit()
+    db.session.add(new_organization)
     db.session.commit()
-
     return redirect(url_for('index'))
+
 if __name__ == '__main__':
     db.create_all()
     app.run(debug=True)

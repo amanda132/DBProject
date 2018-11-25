@@ -39,10 +39,10 @@
               <a class="nav-link" href="{{ url_for('index') }}">Home</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('search') }}">Search Events</a>
+              <a class="nav-link" href="{{ url_for('about') }}">About</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('add') }}">Add Events</a>
+              <a class="nav-link" href="{{ url_for('add') }}">Add</a>
             </li>
           </ul>
         </div>
@@ -50,13 +50,13 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('{{ url_for('static', filename='about-bg.jpg') }}')">
+    <header class="masthead" style="background-image: url('{{ url_for('static', filename='contact-bg.jpg') }}')">
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
             <div class="page-heading">
-              <h1>About Me</h1>
-              <span class="subheading">This is what I do.</span>
+              <h1>Add Post</h1>
+              <span class="subheading">You can create an event post here.</span>
             </div>
           </div>
         </div>
@@ -65,12 +65,14 @@
 
     <!-- Main Content -->
 
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
-    <div class="container">
-      <div class="row">    
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+    <div class="row">    
         <div class="col-xs-8 col-xs-offset-2">
 		    <div class="input-group">
                 <div class="input-group-btn search-panel">
@@ -93,11 +95,11 @@
                 </span>
             </div>
         </div>
-      </div>
-    </div>
+	</div>
+</div>
 
-    <div class="container">
-      <div class="row">    
+<div class="container">
+    <div class="row">    
         <div class="col-xs-8 col-xs-offset-2">
 		    <div class="input-group">
                 <div class="input-group-btn search-panel">
@@ -120,29 +122,5 @@
                 </span>
             </div>
         </div>
-      </div>
-    </div>
-    <hr>
-
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <p class="copyright text-muted">Copyright &copy; Your Website 2017</p>
-          </div>
-        </div>
-      </div>
-    </footer>
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='popper.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="{{ url_for('static', filename='clean-blog.min.js') }}"></script>
-
-  </body>
-
-</html>
+	</div>
+</div>
